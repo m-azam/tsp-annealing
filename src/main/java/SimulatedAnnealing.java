@@ -2,6 +2,7 @@ import entities.Route;
 import entities.World;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SimulatedAnnealing {
 
@@ -40,13 +41,15 @@ public class SimulatedAnnealing {
 
                 if (currentDistance < previousDistance) {
                     allRoutes.add(new Route(route));
-                    currentDistance = currentTemperature * world.coolingFactor;
+                    currentTemperature = currentTemperature * world.coolingFactor;
                 } else {
-
+                    if (ThreadLocalRandom.current().nextDouble(1)
+                            < Math.exp(-distanceDifference/currentTemperature)) {
+                        allRoutes.add(new Route(route));
+                    }
                 }
-                citySwap = (int) Math.ceil(citySwap * (1- 1/currentTemperature));
+                citySwap = (int) Math.ceil(citySwap - (citySwap * (1/currentTemperature)));
             }
-            currentTemperature = world.coolingFactor * currentTemperature;
         }
     }
 

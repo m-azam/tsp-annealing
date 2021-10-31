@@ -8,7 +8,7 @@ public class SimulatedAnnealing {
 
     World world;
     Route initialRoute;
-    ArrayList<Route> allRoutes = new ArrayList<>();
+    private ArrayList<Route> allRoutes = new ArrayList<>();
 
     public SimulatedAnnealing(World world, Route route) {
         this.world = world;
@@ -36,19 +36,24 @@ public class SimulatedAnnealing {
             for (int iteration = 0; iteration < world.iterationsPerTemperature; iteration++) {
                 previousDistance = route.getTotalDistance();
                 route.swapCitiesInRoute(citySwap);
+                route.calculateTotalDistance(world.distanceMatrix);
                 currentDistance = route.getTotalDistance();
                 distanceDifference = Math.abs(previousDistance - currentDistance);
 
                 if (currentDistance < previousDistance) {
                     allRoutes.add(new Route(route));
                     currentTemperature = currentTemperature * world.coolingFactor;
+                    System.out.println("Improved");
                 } else {
-                    if (ThreadLocalRandom.current().nextDouble(1)
-                            < Math.exp(-distanceDifference/currentTemperature)) {
+                    if (ThreadLocalRandom.current().nextDouble(1.0)
+                            < Math.exp(-distanceDifference / currentTemperature)) {
                         allRoutes.add(new Route(route));
+                        System.out.println("Taken still");
+                    } else {
+                        System.out.println("Failed");
                     }
                 }
-                citySwap = (int) Math.ceil(citySwap - (citySwap * (1/currentTemperature)));
+                citySwap = (int) Math.ceil(citySwap - (citySwap * (1 / currentTemperature)));
             }
         }
     }

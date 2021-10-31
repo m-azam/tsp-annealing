@@ -19,7 +19,8 @@ public class Route {
         this.totalDistance = route.getTotalDistance();
     }
 
-    private void calculateTotalDistance(double[][] distanceMatrix) {
+    public void calculateTotalDistance(double[][] distanceMatrix) {
+        totalDistance = 0.0;
         for (int city = 1; city < sequence.size(); city++) {
             totalDistance = totalDistance + distanceMatrix[sequence.get(city - 1)][sequence.get(city)];
         }

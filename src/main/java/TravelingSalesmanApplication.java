@@ -1,17 +1,19 @@
 import entities.Route;
 import entities.World;
+import org.jfree.ui.RefineryUtilities;
 
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class TravelingSalesmanApplication {
     public static void main(String[] args) {
         int numberOfCities = 100;
-        double startingTemperature = 30000000.0;
+        double startingTemperature = 3000000.0;
         double coolingFactor = 0.3;
-        int iterationsPerTemperature = 10;
-        double finalTemperature = 10000.0;
-        int maxCitySwap = 98;
+        int iterationsPerTemperature = 100;
+        double finalTemperature = 5.0;
+        int maxCitySwap;
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Press enter for default values.");
@@ -42,7 +44,7 @@ public class TravelingSalesmanApplication {
         } else {
             maxCitySwap = numberOfCities - 2;
         }
-        System.out.println("Enter final temperature, default is :");
+        System.out.println("Enter final temperature, default is 10000.0:");
         String finalTemperatureInput = scanner.nextLine();
         if (!Objects.equals(finalTemperatureInput, "")) {
             finalTemperature = Double.parseDouble(finalTemperatureInput);
@@ -52,5 +54,10 @@ public class TravelingSalesmanApplication {
                 , finalTemperature, maxCitySwap);
         Route route = new Route(numberOfCities, world.distanceMatrix);
         SimulatedAnnealing simulatedAnnealing = new SimulatedAnnealing(world, route);
+        ArrayList<Route> allRoutes = simulatedAnnealing.fetchAllRoutes();
+        DistanceGraph distanceGraph = new DistanceGraph(allRoutes);
+        distanceGraph.pack();
+        RefineryUtilities.centerFrameOnScreen(distanceGraph);
+        distanceGraph.setVisible(true);
     }
 }

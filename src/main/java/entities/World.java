@@ -5,11 +5,22 @@ import java.util.ArrayList;
 public class World {
 
     public ArrayList<City> cities = new ArrayList<>();
-    double[][] distanceMatrix;
+    public double[][] distanceMatrix;
     int xBound = 3000;
     int yBound = 3000;
+    public double startingTemperature;
+    public double coolingFactor;
+    public int iterationsPerTemperature;
+    public double finalTemperature;
+    public int maxCitySwap;
 
-    public World(int numberOfCities) {
+    public World(int numberOfCities, double startingTemperature, double coolingFactor, int iterationsPerTemperature,
+                 double finalTemperature, int maxCitySwap) {
+        this.startingTemperature = startingTemperature;
+        this.coolingFactor = coolingFactor;
+        this.iterationsPerTemperature = iterationsPerTemperature;
+        this.finalTemperature = finalTemperature;
+        this.maxCitySwap = maxCitySwap;
         distanceMatrix = new double[numberOfCities][numberOfCities];
         for (int iterator = 0; iterator < numberOfCities; iterator++) {
             cities.add(new City(xBound, yBound));

@@ -8,13 +8,15 @@ public class Route {
 
     ArrayList<Integer> sequence = new ArrayList<>();
     double totalDistance = 0.0;
-    ArrayList<Double> distances = new ArrayList<>();
-    double fitness;
 
     public Route(int numberOfCities, double[][] distanceMatrix) {
         sequence.addAll(ThreadLocalRandom.current().ints(0, numberOfCities).distinct().limit(numberOfCities).boxed().collect(Collectors.toList()));
         calculateTotalDistance(distanceMatrix);
-        calculateFitness();
+    }
+
+    public Route(Route route) {
+        this.sequence.addAll(route.getSequence());
+        this.totalDistance = route.getTotalDistance();
     }
 
     private void calculateTotalDistance(double[][] distanceMatrix) {
@@ -24,8 +26,14 @@ public class Route {
         totalDistance = totalDistance + distanceMatrix[sequence.get(sequence.size() - 1)][sequence.get(0)];
     }
 
-    public void calculateFitness() {
-        this.fitness = 1 / totalDistance;
+    public void swapCitiesInRoute(int numberOfCitiesToSwap) {
+        for (int iteration = 0; iteration < numberOfCitiesToSwap; iteration++) {
+            int cityIndexA = ThreadLocalRandom.current().nextInt(sequence.size());
+            int cityIndexB = ThreadLocalRandom.current().nextInt(sequence.size());
+            int tempCity = sequence.get(cityIndexA);
+            sequence.set(cityIndexA, sequence.get(cityIndexB));
+            sequence.set(cityIndexB, tempCity);
+        }
     }
 
     public ArrayList<Integer> getSequence() {
@@ -34,10 +42,6 @@ public class Route {
 
     public double getTotalDistance() {
         return totalDistance;
-    }
-
-    public double getFitness() {
-        return fitness;
     }
 
 }
